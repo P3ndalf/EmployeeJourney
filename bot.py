@@ -62,7 +62,6 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    print(context.args)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{context.args}')
 
 cursor = conn.cursor()
