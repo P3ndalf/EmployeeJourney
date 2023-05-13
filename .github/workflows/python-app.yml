@@ -28,6 +28,7 @@ jobs:
         pip3 install python-telegram-bot
         python3 -m pip install --upgrade pip
         pip install flake8 pytest
+        pip install psycopg2-binary
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run Bot
       run: |
