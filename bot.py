@@ -208,9 +208,9 @@ def leaf(title, description, start_date, online, state):
             </div>
         </div>
         """.format(
-        arr[0],
-        arr[1],
-        arr[2],
+        title,
+        start_date,
+        description,
         is_online,
         status_svg
     )
