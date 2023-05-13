@@ -60,6 +60,11 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             Вид: {4}
         '''.format(event_title, event_state, event_desc, event_date, event_type))
 
+
+async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    print(context.args)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=f'{context.args}')
+
 cursor = conn.cursor()
 
 # Executing an MYSQL function using the execute() method
