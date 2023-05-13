@@ -9,6 +9,10 @@ keyboard = [['Ближайшие события'], ['Сотрудники'], ['�
 reply_markup = ReplyKeyboardMarkup(keyboard)
 
 
+conn = psycopg2.connect(
+   database="railway", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port=7396
+)
+
 async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'Hello {update.effective_user.first_name}')
     # await update.message.
@@ -20,14 +24,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(response)
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    cursor = conn.cursor()
     data = cursor.execute("select version()")
     await context.bot.send_message(chat_id=update.effective_chat.id, text=data)
+    conn.close()
 
-
-conn = psycopg2.connect(
-   database="railway", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port=7396
-)
-#Creating a cursor object using the cursor() method
 cursor = conn.cursor()
 
 #Executing an MYSQL function using the execute() method
@@ -37,7 +38,6 @@ print(cursor.execute("select version()"))
 data = cursor.fetchone()
 print("Connection established to: ",data)
 
-#Closing the connection
 conn.close()
 
 
