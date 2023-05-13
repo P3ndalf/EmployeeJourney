@@ -19,6 +19,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     response = await update.message.reply_text('Выберите функцию', reply_markup=reply_markup)
     print(response)
 
+async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    data = cursor.execute("select version()")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=data)
+
 
 conn = psycopg2.connect(
    database="railway", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port=7396
@@ -42,5 +46,6 @@ app = ApplicationBuilder().token(
 
 app.add_handler(CommandHandler("hello", hello))
 app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("ping", ))
 
 app.run_polling()
