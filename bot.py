@@ -46,6 +46,6 @@ app = ApplicationBuilder().token(
 
 app.add_handler(CommandHandler("hello", hello))
 app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("ping", ))
+app.add_handler(CommandHandler("ping", ping))
 
 app.run_polling()
