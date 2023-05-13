@@ -46,6 +46,7 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         '''
     )
     data = cursor.fetchall()
+    await context.bot.send_message(chat_id=update.effective_chat.id, text='Предстоящие события:')
     for event in data:
         (_, event_type, _, _, _, event_desc, event_date,
          is_online, event_title, _, event_state) = event
