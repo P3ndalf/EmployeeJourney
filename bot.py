@@ -62,7 +62,18 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=''.join(*context.args))
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM employee where lastname like '%{}%'".format(context.args[0]))
+    data = cursor.fetchall()
+    if len(data) == 1:
+        emp = data[0]
+        await context.bot.send_message(chat_id=update.effective_chat.id, text="{0} {1} {2}, д.р. {3}, местоположение - {4}, {5}".format(
+            emp[1], emp[2], emp[3], emp[4], emp[5], emp[6]
+        ))
+    else:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text='Введите повторно команду или введите id рабочего для уточнения')
+    
+        
 
 cursor = conn.cursor()
 
