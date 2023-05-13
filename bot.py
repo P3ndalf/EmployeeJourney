@@ -24,10 +24,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(response)
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    conn = psycopg2.connect(
+        database="railway", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port=7396
+    )
     cursor = conn.cursor()
     data = cursor.execute("select version()")
     await context.bot.send_message(chat_id=update.effective_chat.id, text=data)
-    conn.close()
+    # conn.close()
 
 cursor = conn.cursor()
 
@@ -38,7 +41,7 @@ print(cursor.execute("select version()"))
 data = cursor.fetchone()
 print("Connection established to: ",data)
 
-conn.close()
+# conn.close()
 
 
 app = ApplicationBuilder().token(
