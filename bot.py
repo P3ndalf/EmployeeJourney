@@ -178,15 +178,15 @@ def root(arr): return """
 """.format(arr[0], arr[1], arr[2], arr[3], arr[4])
 
 
-def leaf(arr):
-    is_online = arr[3] if 'active' else 'deactive'
+def leaf(title, description, start_date, online, state):
+    is_online = online if 'active' else 'deactive'
     status_svg = None
 
-    if arg[4] == 'Запланиро0ван':
+    if state == 'Запланиро0ван':
         status_svg = planned_status_svg
-    elif arg[4] == 'Выполнено':
+    elif state == 'Выполнено':
         status_svg = completed_status_svg
-    elif arg[4] == 'Пропущено':
+    elif state == 'Пропущено':
         status_svg = skiped_status_svg
     else:
         status_svg = ''
@@ -202,7 +202,7 @@ def leaf(arr):
                     {4}
                 </div>
                 <span class='leaf-desc'>
-                {2}
+                    {2}
                 </span>
                 <div class='leaf-status {3}'></div>
             </div>
@@ -278,11 +278,21 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         ))
 
         cursor.execute(
-            "select * from employee_event inner join event on event.id = employee_event.id where employee_id = '{0}'".format(emp[0]))
+            """select 
+                title,
+                description,
+                start_date,
+                online,
+                name as state
+            from employee_event 
+            inner join event on event.id = employee_event.id 
+            inner join state on event.state_id = state.id 
+            where employee_id = {}
+        """.format(emp[0]))
         data = cursor.fetchall()
         leaves = []
         for event in data:
-            leaves.append(leaf([str(event[8]), str(event[6]), str(event[5])]))
+            leaves.append(leaf([str(event[0]), str(event[6]), str(event[5])]))
 
         html = ''
         html += root([emp[1], emp[2], emp[3], emp[4], emp[7]])
@@ -300,7 +310,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         image = requests.post(url=HCTI_API_ENDPOINT, data=data, auth=(
             HCTI_API_USER_ID, HCTI_API_KEY))
-        
+
         await context.bot.send_message(chat_id=update.effective_chat.id, text=image.json()['url'])
 
     else:
