@@ -292,7 +292,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         data = cursor.fetchall()
         leaves = []
         for event in data:
-            leaves.append(leaf([str(event[0]), str(event[1]), str(event[2]), str(event[3]), str(event[4])]))
+            leaves.append(leaf(str(event[0]), str(event[1]), str(event[2]), str(event[3]), str(event[4])))
 
         html = ''
         html += root([emp[1], emp[2], emp[3], emp[4], emp[7]])
