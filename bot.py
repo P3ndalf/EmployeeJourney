@@ -20,21 +20,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(response)
 
 
-# conn = psycopg2.connect(
-#    database="postgres", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port= '7396'
-# )
-# #Creating a cursor object using the cursor() method
-# cursor = conn.cursor()
+conn = psycopg2.connect(
+   database="railway", user='postgres', password='ndohA6xh8Gzl4i4GSf2g', host='containers-us-west-179.railway.app', port=7396
+)
+#Creating a cursor object using the cursor() method
+cursor = conn.cursor()
 
-# #Executing an MYSQL function using the execute() method
-# cursor.execute("select version()")
+#Executing an MYSQL function using the execute() method
+print(cursor.execute("select version()"))
 
-# # Fetch a single row using fetchone() method.
-# data = cursor.fetchone()
-# print("Connection established to: ",data)
+# Fetch a single row using fetchone() method.
+data = cursor.fetchone()
+print("Connection established to: ",data)
 
-# #Closing the connection
-# conn.close()
+#Closing the connection
+conn.close()
 
 
 app = ApplicationBuilder().token(
