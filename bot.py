@@ -42,7 +42,8 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             FROM
                 event_type
                 INNER JOIN event ON event_type.id = event.type_id
-                INNER JOIN state ON state.id = event.state_id;
+                INNER JOIN state ON state.id = event.state_id
+            WHERE date > current_date;
         '''
     )
     data = cursor.fetchall()
