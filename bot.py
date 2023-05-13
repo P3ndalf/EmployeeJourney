@@ -80,5 +80,7 @@ app.add_handler(CommandHandler("hello", hello))
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("ping", ping))
 app.add_handler(CommandHandler("events", events))
+app.add_handler(CommandHandler("employee", employee))
+
 
 app.run_polling()
