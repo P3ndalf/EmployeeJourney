@@ -131,11 +131,12 @@ body {
     align-items: center;
     width: fit-content;
     margin-bottom: 5px;
+    margin-left: auto;
     gap: 8px;
 }
 
 .leaf-wrapper:nth-child(2n + 1) .leaf-info {
-    marign-left: auto;
+    marign-left: 0;
 }
 
 .leaf-wrapper:nth-child(2n + 1) .leaf-info svg {
