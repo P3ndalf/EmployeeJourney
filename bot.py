@@ -215,7 +215,7 @@ def leaf(title, description, start_date, online, state):
                 <span class='leaf-desc'>
                     {2}
                 </span>
-                <div class='leaf-status .active'></div>
+                <div class='leaf-status active'></div>
             </div>
         </div>
         """.format(
