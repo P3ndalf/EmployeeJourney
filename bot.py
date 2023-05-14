@@ -53,7 +53,7 @@ body {
   align-items: center;
   width: auto;
   height: 103px;
-  border: 1px solid red;
+  border: 2 px solid red;
   border-radius: 24px;
   padding: 20px 30px;
   margin-left: auto;
@@ -135,6 +135,10 @@ body {
     gap: 8px;
 }
 
+.leaf-wrapper:nth-child(2n + 1) .leaf-info {
+    marign-left: auto;
+}
+
 .leaf-wrapper:nth-child(2n + 1) .leaf-info span {
   order: 1;
 }
@@ -212,7 +216,7 @@ def leaf(title, description, start_date, online, state):
                 <span class='leaf-desc'>
                     {2}
                 </span>
-                <div class='leaf-status {3}'></div>
+                <div class='leaf-status .active'></div>
             </div>
         </div>
         """.format(
@@ -220,7 +224,7 @@ def leaf(title, description, start_date, online, state):
         start_date,
         description,
         is_online,
-        status_svg
+        skiped_status_svg
     )
 
 
@@ -314,8 +318,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         data = {'html': html,
                 'css': style,
-                'google_fonts': "Montserrat",
-                'ms_delay': 500}
+                'google_fonts': "Montserrat"}
 
         image = requests.post(url=HCTI_API_ENDPOINT, data=data, auth=(
             HCTI_API_USER_ID, HCTI_API_KEY))
