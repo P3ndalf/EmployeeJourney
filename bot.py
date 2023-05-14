@@ -44,8 +44,7 @@ style = """
 body {
   font-family: 'Montserrat', sans-serif;
   max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 30px;
 }
 
 .profile {
@@ -131,12 +130,11 @@ body {
     align-items: center;
     width: fit-content;
     margin-bottom: 5px;
-    margin-left: auto;
     gap: 8px;
 }
 
-.leaf-wrapper:nth-child(2n + 1) .leaf-info {
-    margin-left: 0;
+.leaf-wrapper:nth-child(2n) .leaf-info {
+    margin-left: auto;
 }
 
 .leaf-wrapper:nth-child(2n + 1) .leaf-info svg {
@@ -191,10 +189,10 @@ def root(arr): return """
 
 
 def leaf(title, description, start_date, online, state):
-    is_online = online if 'active' else 'deactive'
+    is_online = 'active' if online == 'true'  else 'deactive'
     status_svg = None
 
-    if state == 'Запланиро0ван':
+    if state == 'Запланирован':
         status_svg = planned_status_svg
     elif state == 'Выполнено':
         status_svg = completed_status_svg
