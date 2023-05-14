@@ -44,7 +44,7 @@ style = """
 body {
   font-family: 'Montserrat', sans-serif;
   max-width: 700px;
-  padding: 30px;
+  border: 30px solid white;
 }
 
 .profile {
@@ -193,6 +193,8 @@ def leaf(title, description, start_date, online, state):
     is_online = 'active' if online == 'True'  else 'deactive'
     status_svg = None
 
+    print(state)
+
     if state == 'Запланирован':
         status_svg = planned_status_svg
     elif state == 'Выполнено':
@@ -223,7 +225,7 @@ def leaf(title, description, start_date, online, state):
         start_date,
         description,
         is_online,
-        skiped_status_svg
+        status_svg
     )
 
 
