@@ -315,7 +315,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         data = {'html': html,
                 'css': style,
                 'google_fonts': "Montserrat",
-                'render_when_ready': true}
+                'render_when_ready': True}
 
         image = requests.post(url=HCTI_API_ENDPOINT, data=data, auth=(
             HCTI_API_USER_ID, HCTI_API_KEY))
