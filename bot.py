@@ -321,7 +321,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         image = requests.post(url=HCTI_API_ENDPOINT, data=data, auth=(
             HCTI_API_USER_ID, HCTI_API_KEY))
 
-        # await context.bot.send_message(chat_id=update.effective_chat.id, text=image.json()['url'])
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=image.json()['url'])
 
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='Введите повторно команду с id рабочего для уточнения:')
