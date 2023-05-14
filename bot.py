@@ -274,10 +274,10 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     cursor = conn.cursor()
     if context.args[0].isdigit():
         cursor.execute(
-            "SELECT * FROM employee where id = {}".format(context.args[0]))
+            "SELECT * FROM employee inner join profession on profession.id = employee.profession_id where employee.id = {}".format(context.args[0]))
     else:
         cursor.execute(
-            "SELECT * FROM employee where lastname like '%{}%'".format(context.args[0]))
+            "SELECT * FROM employee inner join profession on profession.id = employee.profession_id where lastname like '%{}%'".format(context.args[0]))
     data = cursor.fetchall()
     if len(data) == 1:
         emp = data[0]
@@ -303,7 +303,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             leaves.append(leaf(str(event[0]), str(event[1]), str(event[2]), str(event[3]), str(event[4])))
 
         html = ''
-        html += root([emp[1], emp[2], emp[3], emp[4], emp[7]])
+        html += root([emp[1], emp[2], emp[3], emp[4], emp[8]])
         for l in leaves:
             html += l
 
