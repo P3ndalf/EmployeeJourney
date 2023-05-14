@@ -190,7 +190,7 @@ def root(arr): return """
 
 
 def leaf(title, description, start_date, online, state):
-    is_online = 'active' if online == 'true'  else 'deactive'
+    is_online = 'active' if online == 'True'  else 'deactive'
     status_svg = None
 
     if state == 'Запланирован':
