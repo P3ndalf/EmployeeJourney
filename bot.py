@@ -1,5 +1,5 @@
 from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
 
 from urllib import request
 
@@ -224,19 +224,52 @@ def leaf(title, description, start_date, online, state):
         status_svg
     )
 
+authDB = [
+    ('mail@mail', 'pass', [None])
+]
 
-async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def checkAuth(id):
+    authed = False
+    for account in authDB:
+        if id not in account[2]:
+            continue
+        authed = True
+    return authed
+
+async def hello(update: Update  , context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
     await update.message.reply_text(f'Hello {update.effective_user.first_name}')
-    # await update.message.
+
+async def auth(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if len(context.args) != 2:
+        await update.message.reply_text(
+        '''Введите логин и пароль в формате:
+/auth <логин> <пароль>''')
+        return
+    [login, passw] = context.args
+    for authEnt in authDB:
+        if login == authEnt[0] and passw == authEnt[1]:
+            entIndex = authDB.index(authEnt)
+            authDB[entIndex][2].append(update.effective_chat.id)
+            await update.message.reply_text("Вы успешно авторизовались")
+            return
+    
+    await update.message.reply_text("Вы ввели неверные данные")
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
     await context.bot.send_message(chat_id=update.effective_chat.id, text="EJM Бот для Хакатона 2023")
     response = await update.message.reply_text('Выберите функцию', reply_markup=reply_markup)
-    print(response)
-
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
     cursor = conn.cursor()
     cursor.execute("select version()")
     data = cursor.fetchone()
@@ -244,6 +277,9 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
     cursor = conn.cursor()
     cursor.execute(
         '''
@@ -253,7 +289,8 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 event_type
                 INNER JOIN event ON event_type.id = event.type_id
                 INNER JOIN state ON state.id = event.state_id
-            WHERE date > current_date;
+            WHERE start_date > current_date
+            order by start_date;
         '''
     )
     data = cursor.fetchall()
@@ -271,6 +308,9 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
     cursor = conn.cursor()
     if context.args[0].isdigit():
         cursor.execute(
@@ -282,7 +322,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if len(data) == 1:
         emp = data[0]
         await context.bot.send_message(chat_id=update.effective_chat.id, text="{0} {1} {2}, д.р. {3}, местоположение - {4}, {5} {6}".format(
-            emp[1], emp[2], emp[3], emp[4], emp[5], "онлайн" if emp[6] == "True" else "оффлайн", emp[8]
+            emp[1], emp[2], emp[3], emp[4], emp[5], "онлайн" if emp[6] == "True" else "оффлайн", emp[9]
         ))
 
         cursor.execute(
@@ -303,12 +343,11 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             leaves.append(leaf(str(event[0]), str(event[1]), str(event[2]), str(event[3]), str(event[4])))
 
         html = ''
-        html += root([emp[1], emp[2], emp[3], emp[4], emp[8]])
+        html += root([emp[1], emp[2], emp[3], emp[4], emp[9]])
         for l in leaves:
             html += l
 
         HCTI_API_ENDPOINT = "https://hcti.io/v1/image"
-        # Retrieve these from https://htmlcsstoimage.com/dashboard
         HCTI_API_USER_ID = '90cc590a-094b-4153-8b0d-9eda9bec7526'
         HCTI_API_KEY = '5c872b4f-1d53-4fd4-be63-758c846a69f4'
 
@@ -328,6 +367,11 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 each[0], each[1], each[2], each[3]
             ))
 
+async def projects(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not checkAuth(update.effective_chat.id):
+        await update.message.reply_text('Вы не авторизованы, используйте команду /auth')
+        return
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Этот функционал пока не реализован")
 
 cursor = conn.cursor()
 
@@ -340,11 +384,15 @@ print("Connection established to: ", data)
 
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 
+app.add_handler(CommandHandler("auth", auth))
 app.add_handler(CommandHandler("hello", hello))
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("ping", ping))
 app.add_handler(CommandHandler("events", events))
 app.add_handler(CommandHandler("employee", employee))
 
+app.add_handler(MessageHandler(filters.Regex("Ближайшие события"), events))
+app.add_handler(MessageHandler(filters.Regex("Сотрудники"), employee))
+app.add_handler(MessageHandler(filters.Regex("Проекты"), projects))
 
 app.run_polling()
