@@ -158,10 +158,6 @@ body {
   text-align: left;
 }
 
-.leaf-wrapper:nth-child(2n + 1) .leaf-info {
-    margin-left: auto;
-}
-
 .leaf-wrapper:nth-child(2n + 1) .leaf-info div {
     order: 1;
 }
