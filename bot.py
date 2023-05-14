@@ -53,7 +53,7 @@ body {
   align-items: center;
   width: auto;
   height: 103px;
-  border: 2 px solid red;
+  border: 2px solid red;
   border-radius: 24px;
   padding: 20px 30px;
   margin-left: auto;
@@ -119,7 +119,6 @@ body {
 .leaf-date {
   font-size: 12px;
   display: block;
-  margin-bottom: 5px;
 }
 
 .leaf-desc {
@@ -139,7 +138,7 @@ body {
     marign-left: auto;
 }
 
-.leaf-wrapper:nth-child(2n + 1) .leaf-info span {
+.leaf-wrapper:nth-child(2n + 1) .leaf-info svg {
   order: 1;
 }
 
@@ -210,8 +209,8 @@ def leaf(title, description, start_date, online, state):
                 {0}
                 </span>
                 <div class='leaf-info'>
-                    <span class='leaf-date'>{1}</span>
                     {4}
+                    <span class='leaf-date'>{1}</span>
                 </div>
                 <span class='leaf-desc'>
                     {2}
@@ -264,7 +263,6 @@ async def events(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     for event in data:
         (_, event_type, _, _, _, event_desc, event_date,
          is_online, event_title, _, event_state) = event
-        print(event)
         await context.bot.send_message(chat_id=update.effective_chat.id, text='''
             Название: {0}
             Статус: {1}
@@ -323,7 +321,7 @@ async def employee(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         image = requests.post(url=HCTI_API_ENDPOINT, data=data, auth=(
             HCTI_API_USER_ID, HCTI_API_KEY))
 
-        await context.bot.send_message(chat_id=update.effective_chat.id, text=image.json()['url'])
+        # await context.bot.send_message(chat_id=update.effective_chat.id, text=image.json()['url'])
 
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text='Введите повторно команду с id рабочего для уточнения:')
