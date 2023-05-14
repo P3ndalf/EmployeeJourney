@@ -44,7 +44,7 @@ style = """
 body {
   font-family: 'Montserrat', sans-serif;
   max-width: 700px;
-  margin: 30px;
+  padding: 30px;
 }
 
 .profile {
@@ -96,6 +96,7 @@ body {
 .leaf-title {
   text-align: right;
   display: block;
+  margin-bottom: 2px;
 }
 
 .leaf-status {
@@ -214,7 +215,7 @@ def leaf(title, description, start_date, online, state):
                 <span class='leaf-desc'>
                     {2}
                 </span>
-                <div class='leaf-status active'></div>
+                <div class='leaf-status {3}'></div>
             </div>
         </div>
         """.format(
