@@ -136,7 +136,7 @@ body {
 }
 
 .leaf-wrapper:nth-child(2n + 1) .leaf-info {
-    marign-left: 0;
+    margin-left: 0;
 }
 
 .leaf-wrapper:nth-child(2n + 1) .leaf-info svg {
